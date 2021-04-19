@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="74ea64c1-4ee5-4dc5-92a5-20ed6229c4ed" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="hello-worldFlow" doc:id="0d3d6407-5ff9-4bd9-8afc-62ce055d235e" >
+		<http:listener doc:name="Listener" doc:id="d36cb1e2-edf8-4a06-aae8-e526dcad1cf8" config-ref="HTTP_Listener_config" path="/test"/>
+		<logger level="INFO" doc:name="Input" doc:id="a1d3abfb-576f-48cb-a57c-a43887ba2799" category="this is the first trigger component in the flow" message="#[payload]"/>
+		<set-variable value='"123"' doc:name="idName" doc:id="6b79690d-926c-49ec-aee2-cc16a07054fe" variableName="idName"/>
+		<set-variable value="#[message]" doc:name="messageVar" doc:id="19389200-8bc0-4dd1-a320-c3ee66555a15" variableName="messageVar"/>
+		<set-variable value="#[payload]" doc:name="payloadVar" doc:id="38894939-9fa0-4f60-b4ce-5530e26e1b2f" variableName="payloadVar"/>
+		<set-variable value="#[attributes]" doc:name="attributeVar" doc:id="b468c684-6b7a-49d8-b8ef-4a3fd483749d" variableName="attributeVar"/>
+		<set-payload value='"hello world......how are you!?"' doc:name="Mulesoft Integration" doc:id="7c992e1b-3651-49d5-aee8-f90dc8b56382" />
+		<ee:transform doc:name="Transform Message" doc:id="3619e13f-812b-40db-ac8a-789f0ed3ad9b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="testVar" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-variable>
+				<ee:set-variable variableName="testVar2" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Output" doc:id="4eaa0c26-33ab-42bd-82fb-87e02acb9878" message="#[vars.idName]" category="logger at the end of the floe"/>
+	</flow>
+</mule>
